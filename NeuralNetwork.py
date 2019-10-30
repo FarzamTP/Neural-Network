@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.optimize as opt
 
-
+# FIXME: IT IS BROKEN!
 class NeuralNetwork:
     def __init__(self, theta1, theta2, lr=0.01, num_iter=1000, Lambda=0, add_bias=True, verbose=False):
         self.theta1 = theta1

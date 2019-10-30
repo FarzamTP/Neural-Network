@@ -32,13 +32,13 @@ def one_hot(y):
 
 
 print()
-print("[STEP1] Retrieving data from file...")
+print("[NOTE] Retrieving data from file...")
 # Gets data from data.mat file.
 data = io.loadmat('dataset/data.mat')
 print("Data loaded successfully!")
 print()
 
-print("[STEP2] Loading pre-trained weights...")
+print("[NOTE] Loading pre-trained weights...")
 # Gets pre-trained weights from weights.mat
 weights = io.loadmat('weights/weights.mat')
 print("Weights loaded successfully!")
@@ -131,7 +131,7 @@ def forward_propagation(X, parameters):
     return A2, cache
 
 
-def compute_cost(A2, y, parameters):
+def compute_cost(A2, y):
     m = y.shape[1]
     logprobs = np.multiply(y, np.log(A2)) + np.multiply((1 - y), np.log(1 - A2))
     cost = np.sum(logprobs) * -1 / m
@@ -198,7 +198,7 @@ def nn_model(X, y, n_h, num_iterations=10000, print_cost=False):
 
     for i in range(num_iterations):
         A2, cache = forward_propagation(X, parameters)
-        cost = compute_cost(A2, y, parameters)
+        cost = compute_cost(A2, y)
         grads = back_propagation(parameters, cache, X, y)
         parameters = update_parameters(parameters, grads)
 
@@ -229,30 +229,31 @@ parameters = {
 }
 
 for param in parameters:
-    if os.path.exists('./model/%s.npy' % param):
-        parameters[param] = np.load('./model/%s.npy' % param)
+    if os.path.exists('./model/Gradient Descent/%s.npy' % param):
+        parameters[param] = np.load('./model/Gradient Descent/%s.npy' % param)
         print("[Note]: %s loaded successfully..." % param)
     else:
         warnings.warn("[Error]: Couldn't import %s!" % param)
-        warnings.warn("Training model...")
+        print("Training model...")
         break
 
-if os.path.exists('./model/costs.npy'):
-    cost_history = np.load('./model/costs.npy')
+if os.path.exists('./model/Gradient Descent/costs.npy'):
+    cost_history = np.load('./model/Gradient Descent/costs.npy')
     print("[Note]: Costs loaded successfully...")
 else:
     cost_history = None
 
-if parameters["W1"] is None or parameters["b1"] is None or parameters["W2"] is None or parameters["b2"] is None or cost_history is None:
+if parameters["W1"] is None or parameters["b1"] is None\
+        or parameters["W2"] is None or parameters["b2"] is None or cost_history is None:
     parameters, cost_history = nn_model(X, y, n_h=25, num_iterations=10000, print_cost=True)
 
     print("Saving weights...")
-    np.save('./model/W1', parameters["W1"])
-    np.save('./model/W2', parameters["W2"])
-    np.save('./model/b1', parameters["b1"])
-    np.save('./model/b2', parameters["b2"])
+    np.save('./model/Gradient Descent/W1', parameters["W1"])
+    np.save('./model/Gradient Descent/W2', parameters["W2"])
+    np.save('./model/Gradient Descent/b1', parameters["b1"])
+    np.save('./model/Gradient Descent/b2', parameters["b2"])
     print("Weights saved successfully...")
-    np.save('./model/costs', cost_history)
+    np.save('./model/Gradient Descent/costs', cost_history)
     print("Cost history saved successfully.")
 
 print()
